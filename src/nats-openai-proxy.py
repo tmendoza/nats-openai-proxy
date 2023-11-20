@@ -17,7 +17,7 @@ class OpenAINATSProxy:
         self.nc = NATS()
 
     # Setup NATS connection with nkeys and TLS
-    async def secure_connect_to_nats():
+    async def secure_connect_to_nats(self):
         options = {
             "servers": config["nats"]["server"],
             "name": "OpenAINATSProxy"
@@ -43,7 +43,12 @@ class OpenAINATSProxy:
             options["tls"] = context
 
         # Connect to NATS
-        await nats.connect(**options)
+        try:
+            await self.nc.connect(**options)
+            logging.info("Connected to NATS Server")
+        except Exception as e:
+            logging.error(f"Failed to connect to NATS server: {e}")
+            exit(1)
 
     async def connect_to_nats(self):
         try:
@@ -115,23 +120,23 @@ if __name__ == "__main__":
     """
     # Override config with CLI arguments if provided
     if args.nats.server:
-        config['nats.server'] = args.nats.server
+        config['nats']['server'] = args.nats.server
     if args.nats.openai_api_key:
-        config['nats.openai_api_key'] = args.nats.openai_api_key
+        config['nats']['openai_api_key'] = args.nats.openai_api_key
     if args.nats.subject:
-        config['nats.subject'] = args.nats.subject
+        config['nats']['subject'] = args.nats.subject
     if args.nats.engine:
-        config['nats.engine'] = args.nats.engine
+        config['nats']['engine'] = args.nats.engine
     if args.nats.nkey_seed_file:
-        config['nats.nkey_seed_file'] = args.nats.nkey_seed_file
+        config['nats']['nkey_seed_file'] = args.nats.nkey_seed_file
     if args.nats.tls.enabled:
-        config['nats.tls.enabled'] = args.nats.tls.enabled
+        config['nats']['tls']['enabled'] = args.nats.tls.enabled
     if args.nats.tls.cert:
-        config['nats.tls.cert'] = args.nats.tls.cert
+        config['nats']['tls']['cert'] = args.nats.tls.cert
     if args.nats.tls.key:
-        config['nats.tls.key'] = args.nats.tls.key
+        config['nats']['tls']['key'] = args.nats.tls.key
     if args.nats.tls.ca:
-        config['nats.tls.ca'] = args.nats.tls.ca
+        config['nats']['tls']['ca'] = args.nats.tls.ca
 
     # Setup logging
     logging.basicConfig(level=logging.INFO)
