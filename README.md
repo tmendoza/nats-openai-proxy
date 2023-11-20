@@ -64,14 +64,24 @@ NATS provides the messaging infrastructure with added security features like nke
 ## Getting Started
 
 1. Configure the `config.yaml` file with your NATS, OpenAI details, and security settings.
-2. Run the application using `python openai_nats_proxy.py`.
+
+```
+nats:
+  server: "nats://localhost:4222"
+  subject: "openai_requests"
+  nkey_seed_file: "path/to/nkey_seed_file"
+  tls:
+    enabled: true
+    cert: "path/to/cert.pem"
+    key: "path/to/key.pem"
+    ca: "path/to/ca.pem" # Optional
+```
+2. Run the application using `python nats-openai-proxy.py`.
 3. Override configuration settings as needed using command-line arguments.
 
 ## Contributions and Support
 
 Contributions are welcome. Submit issues and pull requests through GitHub. For support, use the project's issue tracker.
-
-Still LOTS of boogs!
 
 ## License
 
@@ -79,4 +89,4 @@ NATS OpenAI Proxy is released under the [MIT License](LICENSE).
 
 ---
 
-This revised README includes the necessary information about the added NATS nkeys and TLS features, ensuring users understand the enhanced security capabilities of the NATS OpenAI Proxy tool.
+This revised README includes the necessary information about the added NATS nkeys and TLS features, ensuring users understand the enhanced security capabilities of the OpenAINATSProxy tool.
