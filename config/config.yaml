@@ -1,0 +1,11 @@
+nats:
+  server: "nats://localhost:4222"
+  subject: "openai_requests"
+  openai_api_key: "your-openai-api-key"
+  engine: "text-davinci-004"
+  nkey_seed_file: "path/to/nkey_seed_file"
+  tls:
+    enabled: true
+    cert: "path/to/cert.pem"
+    key: "path/to/key.pem"
+    ca: "path/to/ca.pem" # Optional

@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenAI NATS Proxy Service
+After=network.target nats.service
+Wants=nats.service
+
+[Service]
+User=chatgptd
+Group=chatgptd
+Type=simple
+ExecStart=/usr/bin/python3 /path/to/openai_nats_proxy.py --config /path/to/config.yaml
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
