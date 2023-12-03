@@ -10,13 +10,13 @@
 rm -f *.pem *.crt *.srl *.key *.csr
 
 # Generate the CA's rpivate key (ca-key.pem) and a self-signed certificate (ca-cert.pem)
-# openssl req -x509 -newkey rsa:4096 -days 365 -keyout ca-key.pem -out ca-cert.pem -subj "/C=US/ST=Illinois/L=Chicago/O='Bloom, Inc.'/OU=Infrastructure/CN=clueelf.io/emailAddress=commercial@tonymendoza.us"
+# openssl req -x509 -newkey rsa:4096 -days 365 -keyout ca-key.pem -out ca-cert.pem -subj "YOUR STUFF HERE"
 
 openssl req -x509 \
             -sha256 -days 356 \
             -nodes \
             -newkey rsa:2048 \
-            -subj "/CN=clueelf.io/C=US/ST=Illinois/L=Chicago" \
+            -subj "YOUR STUFF HERE" \
             -keyout rootCA.key -out rootCA.crt 
 
 
@@ -51,9 +51,8 @@ openssl x509 -req \
     -sha256 
 
 # Launch the NATS Server
-# nats-server --tls --tlscert=server.crt --tlskey=server.key --tlscacert=rootCA.crt --tlsverify
+# nats-server --tls --tlscert=security/server.crt --tlskey=security/server.key --tlscacert=security/rootCA.crt --tlsverify
 
 # Launch the NATS Client
-# nats bench --tlsca=rootCA.crt --tlscert=client.crt --tlskey=client.key \
-#    benchsubject --pub 1 --sub 10 --server=nats://127.0.0.1:4222
+# nats bench --tlsca=security/rootCA.crt --tlscert=security/client.crt --tlskey=security/client.key benchsubject --pub 1 --sub 10 --server=nats://SSL DOMAIN HERE:4222
 
