@@ -136,7 +136,7 @@ def load_config(file_path):
 def parse_arguments():
     parser = argparse.ArgumentParser(description="OpenAI-NATS Proxy Service")
     parser.add_argument("--config", help="Path to the configuration file", default="config.yaml")
-    parser.add_argument("--nats_server", help="NATS server address", default="nats://localhost:4222")
+    parser.add_argument("--nats_server", help="NATS server address")
     parser.add_argument("--openai_api_key", help="OpenAI API key")
     parser.add_argument("--subject", help="NATS subject to listen on")
     parser.add_argument("--engine", help="OpenAI engine to use")
