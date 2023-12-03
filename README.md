@@ -30,7 +30,7 @@ NATS OpenAI Proxy listens on a specified NATS subject (channel) for messages. Up
 Install the required Python packages using pip:
 
 ```bash
-pip install nats.py openai pyyaml argparse
+pip install nats.py openai pyyaml argparse nkeys
 ```
 
 ## Configuration
