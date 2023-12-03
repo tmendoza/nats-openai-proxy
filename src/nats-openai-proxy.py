@@ -69,13 +69,16 @@ class OpenAINATSProxy:
 
         # Configure TLS if enabled
         if config["nats"]["tls"]["enabled"]:
-            context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
+            context = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
+            
+            if "ca" in config["nats"]["tls"]:
+                context.load_verify_locations(cafile=config["nats"]["tls"]["ca"])
+
             context.load_cert_chain(
                 certfile=config["nats"]["tls"]["cert"],
                 keyfile=config["nats"]["tls"]["key"]
             )
-            if "ca" in config["nats"]["tls"]:
-                context.load_verify_locations(cafile=config["nats"]["tls"]["ca"])
+            
             options["tls"] = context
     
 
