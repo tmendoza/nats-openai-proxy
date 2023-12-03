@@ -126,6 +126,57 @@ As of August 2021:
 
 3. Override configuration settings as needed using command-line arguments.
 
+### Start the OpanAI Proxy service using a different model (engine) and enable debugging
+```
+$ python3 src/nats-openai-proxy.py --config ./config/config.yaml --engine gpt-3.5-turbo-0613 --debug true
+DEBUG:asyncio:Using selector: EpollSelector
+INFO:root:Connected to NATS Server
+INFO:root:Listening for requests on 'openai_requests'
+INFO:root:Handling request 'List the last 10 presidents'
+DEBUG:root:Making call to OpenAI...
+DEBUG:root:Using OpenAI Key: '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'
+DEBUG:httpx:load_ssl_context verify=True cert=None trust_env=True http2=False
+DEBUG:httpx:load_verify_locations cafile='/etc/ssl/certs/ca-certificates.crt'
+DEBUG:openai._base_client:Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'user', 'content': 'List the last 10 presidents'}], 'model': 'gpt-3.5-turbo-0613'}}
+DEBUG:httpcore.connection:connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+DEBUG:httpcore.connection:connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f69f356ae90>
+DEBUG:httpcore.connection:start_tls.started ssl_context=<ssl.SSLContext object at 0x7f69f34bf2c0> server_hostname='api.openai.com' timeout=5.0
+DEBUG:httpcore.connection:start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x7f69f356ae60>
+DEBUG:httpcore.http11:send_request_headers.started request=<Request [b'POST']>
+DEBUG:httpcore.http11:send_request_headers.complete
+DEBUG:httpcore.http11:send_request_body.started request=<Request [b'POST']>
+DEBUG:httpcore.http11:send_request_body.complete
+DEBUG:httpcore.http11:receive_response_headers.started request=<Request [b'POST']>
+DEBUG:httpcore.http11:receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Sun, 03 Dec 2023 21:35:33 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-allow-origin', b'*'), (b'Cache-Control', b'no-cache, must-revalidate'), (b'openai-model', b'gpt-3.5-turbo-0613'), (b'openai-organization', b'tony-mendoza-inc'), (b'openai-processing-ms', b'2251'), (b'openai-version', b'2020-10-01'), (b'strict-transport-security', b'max-age=15724800; includeSubDomains'), (b'x-ratelimit-limit-requests', b'5000'), (b'x-ratelimit-limit-tokens', b'80000'), (b'x-ratelimit-limit-tokens_usage_based', b'80000'), (b'x-ratelimit-remaining-requests', b'4999'), (b'x-ratelimit-remaining-tokens', b'79976'), (b'x-ratelimit-remaining-tokens_usage_based', b'79976'), (b'x-ratelimit-reset-requests', b'12ms'), (b'x-ratelimit-reset-tokens', b'18ms'), (b'x-ratelimit-reset-tokens_usage_based', b'18ms'), (b'x-request-id', b'a5f2c2ba533b009a4abf9124675c9229'), (b'CF-Cache-Status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=XbPt9eLt2Saxv0eQSBITK9WDaPcCXU8uSuAvZ.T.ASo-1701639333-0-AccnD2Uml+j4/CLCPIz7MulQYPP3t3GdDRHDELqh4to/jNe6ndsn6PVk38zTSN3q5R3TsmtsqabSmY2bKE6Q3s4=; path=/; expires=Sun, 03-Dec-23 22:05:33 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Set-Cookie', b'_cfuvid=uIbo3X1.zOB.h3WqKBa5ucd1SgdVibhR_N6HEx3QEbo-1701639333093-0-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'82fef0978c5c60b3-ORD'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+DEBUG:httpcore.http11:receive_response_body.started request=<Request [b'POST']>
+DEBUG:httpcore.http11:receive_response_body.complete
+DEBUG:httpcore.http11:response_closed.started
+DEBUG:httpcore.http11:response_closed.complete
+DEBUG:openai._base_client:HTTP Request: POST https://api.openai.com/v1/chat/completions "200 OK"
+DEBUG:root:Returned completion: '1. Donald Trump (2017-2021)
+2. Barack Obama (2009-2017)
+3. George W. Bush (2001-2009)
+4. Bill Clinton (1993-2001)
+5. George H.W. Bush (1989-1993)
+6. Ronald Reagan (1981-1989)
+7. Jimmy Carter (1977-1981)
+8. Gerald Ford (1974-1977)
+9. Richard Nixon (1969-1974)
+10. Lyndon B. Johnson (1963-1969)'
+DEBUG:root:Publishing results back to client... 1. Donald Trump (2017-2021)
+2. Barack Obama (2009-2017)
+3. George W. Bush (2001-2009)
+4. Bill Clinton (1993-2001)
+5. George H.W. Bush (1989-1993)
+6. Ronald Reagan (1981-1989)
+7. Jimmy Carter (1977-1981)
+8. Gerald Ford (1974-1977)
+9. Richard Nixon (1969-1974)
+10. Lyndon B. Johnson (1963-1969)
+```
+
+
 ## Contributions and Support
 
 Contributions are welcome. Submit issues and pull requests through GitHub. For support, use the project's issue tracker.
