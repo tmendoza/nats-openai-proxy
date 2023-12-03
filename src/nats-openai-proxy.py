@@ -66,7 +66,7 @@ class OpenAINATSProxy:
             options["nkeys_seed"] = seed
             options["signature_cb"] = lambda nonce: nk.sign(nonce.encode())
         """
-        
+
         # Configure TLS if enabled
         if config["nats"]["tls"]["enabled"]:
             context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
@@ -96,9 +96,9 @@ class OpenAINATSProxy:
         data = msg.data.decode()
         logging.info(f"Handling request '{data}'")
         try:
-            logging.info("Making call to OpenAI...")
+            logging.debug("Making call to OpenAI...")
             response = self.query_openai(data)
-            logging.info(f"Publishing results back to client... {response}")
+            logging.debug(f"Publishing results back to client... {response}")
             await self.nc.publish(msg.reply, response.encode())
         except Exception as e:
             logging.error(f"Error handling request: {e}")
@@ -138,15 +138,19 @@ def parse_arguments():
     parser.add_argument("--subject", help="NATS subject to listen on")
     parser.add_argument("--engine", help="OpenAI engine to use")
     parser.add_argument("--nkey_seed_file", help="Path to the NATS nkey seed file for authentication.")
-    parser.add_argument("--tls_enabled", help="NATS TLS Security enabled.", default=False)
+    parser.add_argument("--tls_enabled", help="NATS TLS Security enabled.  Default = false", default=False)
     parser.add_argument("--tls_cert", help="Path to the TLS certificate file.")
     parser.add_argument("--tls_key", help="Path to the TLS key file.")
     parser.add_argument("--tls_ca", help="Path to the TLS CA file (optional).")
+    parser.add_argument("--debug", help="Enable debug logging (optional).  Default = false", default=False)
 
     return parser.parse_args()
 
 if __name__ == "__main__":
     args = parse_arguments()
+
+    if args.debug:
+        logging.basicConfig(level=logging.DEBUG)
 
     # Load configuration file
     config = load_config(args.config)
