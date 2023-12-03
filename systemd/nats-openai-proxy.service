@@ -7,7 +7,7 @@ Wants=nats.service
 User=chatgptd
 Group=chatgptd
 Type=simple
-ExecStart=/usr/bin/python3 /path/to/openai_nats_proxy.py --config /path/to/config.yaml
+ExecStart=/usr/bin/python3 /path/to/nats-openai-proxy.py --config /path/to/config.yaml
 Restart=on-failure
 RestartSec=10
 
