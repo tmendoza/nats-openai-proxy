@@ -78,6 +78,52 @@ nats:
     ca: "path/to/ca.pem" # Optional
 ```
 2. Run the application using `python nats-openai-proxy.py`.
+
+### Start NATS
+```bash
+$ nats-server -D
+[687918] 2023/12/03 21:22:36.982451 [INF] Starting nats-server
+[687918] 2023/12/03 21:22:36.982594 [INF]   Version:  2.10.6
+[687918] 2023/12/03 21:22:36.982603 [INF]   Git:      [77e4ac6]
+[687918] 2023/12/03 21:22:36.982613 [DBG]   Go build: go1.21.4
+[687918] 2023/12/03 21:22:36.982616 [INF]   Name:     NCY5TPJTMAUBVVGAYZEAMUDQ3WAMW3FVZM2TISSMJ5DBLNGOUEZ5MAQP
+[687918] 2023/12/03 21:22:36.982625 [INF]   ID:       NCY5TPJTMAUBVVGAYZEAMUDQ3WAMW3FVZM2TISSMJ5DBLNGOUEZ5MAQP
+[687918] 2023/12/03 21:22:36.982645 [DBG] Created system account: "$SYS"
+[687918] 2023/12/03 21:22:36.983350 [INF] Listening for client connections on 0.0.0.0:4222
+[687918] 2023/12/03 21:22:36.983371 [DBG] Get non local IPs for "0.0.0.0"
+[687918] 2023/12/03 21:22:36.983612 [DBG]   ip=149.28.127.156
+[687918] 2023/12/03 21:22:36.983648 [DBG]   ip=172.17.0.1
+[687918] 2023/12/03 21:22:36.983695 [INF] Server is ready
+[687918] 2023/12/03 21:22:36.984544 [DBG] maxprocs: Leaving GOMAXPROCS=2: CPU quota undefined
+```
+
+### Start the Openai Proxy Service
+```bash
+$ python3 src/nats-openai-proxy.py --config ./config/config.yaml 
+INFO:root:Connected to NATS Server
+INFO:root:Listening for requests on 'openai_requests'
+```
+
+### Make a request to Openai through the NATS queue 'openai_requests' using the [nats cli](https://github.com/nats-io/natscli)
+```bash
+$ nats request 'openai_requests' "List the last 10 presidents" --timeout=20000ms
+21:24:08 Sending request on "openai_requests"
+21:24:16 Received with rtt 8.183064673s
+As of August 2021:
+
+1. Joe Biden (2021-present)
+2. Donald Trump (2017-2021)
+3. Barack Obama (2009-2017)
+4. George W. Bush (2001-2009)
+5. Bill Clinton (1993-2001)
+6. George H. W. Bush (1989-1993)
+7. Ronald Reagan (1981-1989)
+8. Jimmy Carter (1977-1981)
+9. Gerald Ford (1974-1977)
+10. Richard Nixon (1969-1974)
+
+```
+
 3. Override configuration settings as needed using command-line arguments.
 
 ## Contributions and Support
