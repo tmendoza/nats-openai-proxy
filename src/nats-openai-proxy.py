@@ -4,7 +4,7 @@ import yaml
 import logging
 import argparse
 
-import nats
+import nats, nkeys
 from nats.aio.client import Client as NATS
 import ssl
 
@@ -23,14 +23,13 @@ class OpenAINATSProxy:
         }
 
         # Configure nkeys if provided
-        """
-        if "nkey_seed_file" in config["nats"]:
-            with open(config["nats"]["nkey_seed_file"]) as f:
-                seed = f.read()
-            nk = NKeys.from_seed(seed.encode())
-            options["nkeys_seed"] = seed
-            options["signature_cb"] = lambda nonce: nk.sign(nonce.encode())
-        """
+        if config["nats"]["nkey"]["enabled"]:
+            if "seed_file" in config["nats"]["nkey"]:
+                with open(config["nats"]["nkey"]["seed_file"]) as f:
+                    seed = f.read()
+                nk = nkeys.from_seed(seed.encode())
+                options["nkeys_seed"] = seed
+                options["signature_cb"] = lambda nonce: nk.sign(nonce.encode())
 
         # Configure TLS if enabled
         if config["nats"]["tls"]["enabled"]:
@@ -38,14 +37,12 @@ class OpenAINATSProxy:
             
             if "ca" in config["nats"]["tls"]:
                 context.load_verify_locations(cafile=config["nats"]["tls"]["ca"])
-
+            
             context.load_cert_chain(
                 certfile=config["nats"]["tls"]["cert"],
                 keyfile=config["nats"]["tls"]["key"]
             )
-            
             options["tls"] = context
-    
 
         try:
             await self.nc.connect(**options)
@@ -105,6 +102,7 @@ def parse_arguments():
     parser.add_argument("--openai_api_key", help="OpenAI API key")
     parser.add_argument("--subject", help="NATS subject to listen on")
     parser.add_argument("--engine", help="OpenAI engine to use")
+    parser.add_argument("--nkey_enabled", help="NATS Nkey tokens enabled.", default=False)
     parser.add_argument("--nkey_seed_file", help="Path to the NATS nkey seed file for authentication.")
     parser.add_argument("--tls_enabled", help="NATS TLS Security enabled.  Default = false", default=False)
     parser.add_argument("--tls_cert", help="Path to the TLS certificate file.")
@@ -133,8 +131,10 @@ if __name__ == "__main__":
         config['nats']['subject'] = args.subject
     if args.engine:
         config['nats']['engine'] = args.engine
+    if args.nkey_enabled:
+        config['nats']['nkey']['enabled'] = args.nkey_enabled
     if args.nkey_seed_file:
-        config['nats']['nkey_seed_file'] = args.nkey_seed_file
+        config['nats']['nkey']['seed_file'] = args.nkey_seed_file
     if args.tls_enabled:
         config['nats']['tls']['enabled'] = args.tls_enabled
     if args.tls_cert:
