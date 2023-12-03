@@ -15,41 +15,6 @@ class OpenAINATSProxy:
         self.config = config
         self.nc = NATS()
 
-    """
-    # Setup NATS connection with nkeys and TLS
-    async def secure_connect_to_nats(self):
-        options = {
-            "servers": config["nats"]["server"],
-            "name": "OpenAINATSProxy"
-        }
-
-        # Configure nkeys if provided
-        if "nkey_seed_file" in config["nats"]:
-            with open(config["nats"]["nkey_seed_file"]) as f:
-                seed = f.read()
-            nk = NKeys.from_seed(seed.encode())
-            options["nkeys_seed"] = seed
-            options["signature_cb"] = lambda nonce: nk.sign(nonce.encode())
-
-        # Configure TLS if enabled
-        if config["nats"]["tls"]["enabled"]:
-            context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH)
-            context.load_cert_chain(
-                certfile=config["nats"]["tls"]["cert"],
-                keyfile=config["nats"]["tls"]["key"]
-            )
-            if "ca" in config["nats"]["tls"]:
-                context.load_verify_locations(cafile=config["nats"]["tls"]["ca"])
-            options["tls"] = context
-
-        # Connect to NATS
-        try:
-            await self.nc.connect(**options)
-            logging.info("Connected to NATS Server")
-        except Exception as e:
-            logging.error(f"Failed to connect to NATS server: {e}")
-            exit(1)
-    """
 
     async def connect_to_nats(self):
         options = {
