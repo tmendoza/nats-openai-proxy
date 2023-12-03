@@ -23,6 +23,7 @@ NATS OpenAI Proxy listens on a specified NATS subject (channel) for messages. Up
 - `openai`
 - `pyyaml`
 - `argparse`
+- `nkeys`
 
 ## Installation
 
