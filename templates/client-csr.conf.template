@@ -1,0 +1,23 @@
+[ req ]
+default_bits = 2048
+prompt = no
+default_md = sha256
+req_extensions = req_ext
+distinguished_name = dn
+
+[ dn ]
+C = <REPLACE WITH YOUR COUNTRY>
+ST = <REPLACE WITH YOUR STATE>
+L = <REPLACE WITH YOUR COUNCITYTRY>
+O = <REPLACE WITH YOUR ORG>
+OU =  <REPLACE WITH YOUR DEPT>
+CN = <REPLACE WITH YOUR DN>
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = <DOMAIN NAME 1>
+DNS.2 = <DOMAIN NAME 2>
+IP.1 = 127.0.0.1
+IP.2 = 10.0.0.202
